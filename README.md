@@ -1,4 +1,4 @@
-# tapin_api
+# Groove-API
 
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
 [![License: MIT][license_badge]][license_link]
@@ -19,7 +19,7 @@ How to start docker:
     docker-compose up
 
 How to connect to postgres:
-    docker exec -it postgres-tapin-dev psql -U postgres -d tapin-dev
+    docker exec -it postgres-groove-dev psql -U postgres -d groove-dev
 
 Future Considerations:
     Implement redis to cache location data for my heatmap --> improve performance

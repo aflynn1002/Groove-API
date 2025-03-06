@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack
+    restart: always
+    ports:
+      - "4566:4566"
+      - "4571:4571"
+    environment:
+      - SERVICES=s3
+      - DEBUG=1
+      - AWS_ACCESS_KEY_ID=dev
+      - AWS_SECRET_ACCESS_KEY=password
+    volumes:
+      - "./localstack/hooks/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh" # ready hook
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres-tapin-dev
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=tapin-dev
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
+  # dartfrog:
+  #   build:
+  #     context: ..
+  #     dockerfile: tapin-devtools/Dockerfile
+  #   container_name: dartfrog
+  #   ports:
+  #     - "8080:8080"
+  #   networks:
+  #     - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
